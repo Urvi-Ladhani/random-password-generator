@@ -3,36 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>AuraPass // Secure & Simple</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <form>
-        <h1>RANDOM PASSWORD GENERATOR</h1>
-        <p>Start password generation</p>
-        <label for="length">Length:</label>
-        <input id="length" type="number"><br>
+    <div class="glass-card">
+        <header>
+            <div class="logo-area">
+                <div class="logo-dot"></div>
+                <h1>Aura<span>Pass</span></h1>
+            </div>
+            <p>Secure, Simple & Reliable</p>
+        </header>
 
-        <label for="lowercase">Lowercase letter:</label>
-        <input id="lowercase" type="checkbox"><br>
+        <section class="output-area">
+            <div class="result-container">
+                <!-- Result now handles long strings -->
+                <span id="result">...</span>
+                <button id="copy-btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                </button>
+            </div>
+            <div class="strength-meter">
+                <div id="strength-fill"></div>
+            </div>
+            <div class="strength-label">
+                <span>Security:</span>
+                <b id="strength-text">---</b>
+            </div>
+        </section>
 
-        <label for="uppercase">Uppercase letter:</label>
-        <input id="uppercase" type="checkbox"><br>
+        <section class="controls">
+            <div class="control-group">
+                <div class="label-row">
+                    <label>Length</label>
+                    <span id="length-val">16</span>
+                </div>
+                <input type="range" id="length" min="4" max="40" value="16" class="modern-slider">
+            </div>
 
-        <label for="number">Number:</label>
-        <input id="number" type="checkbox"><br>
+            <div class="toggle-grid">
+                <div class="tgl-row">
+                    <span>Uppercase</span>
+                    <label class="tgl-switch">
+                        <input type="checkbox" id="uppercase" checked>
+                        <span class="tgl-slider"></span>
+                    </label>
+                </div>
+                <div class="tgl-row">
+                    <span>Lowercase</span>
+                    <label class="tgl-switch">
+                        <input type="checkbox" id="lowercase" checked>
+                        <span class="tgl-slider"></span>
+                    </label>
+                </div>
+                <div class="tgl-row">
+                    <span>Numbers</span>
+                    <label class="tgl-switch">
+                        <input type="checkbox" id="number" checked>
+                        <span class="tgl-slider"></span>
+                    </label>
+                </div>
+                <div class="tgl-row">
+                    <span>Symbols</span>
+                    <label class="tgl-switch">
+                        <input type="checkbox" id="symbol">
+                        <span class="tgl-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </section>
 
-        <label for="symbol">Symbol:</label>
-        <input id="symbol" type="checkbox"><br>
-
-        <button type="button" id="generate">Generate</button>
-        <p id="result"></p>
-
-        <button type="button" id="regen">Regenerate</button>
-
-        
-
-        <script src="index.js"></script>
-
-    </form>
+        <button id="generate" class="main-button">Generate Password</button>
+    </div>
+    <script src="index.js"></script>
 </body>
 </html>

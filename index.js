@@ -1,78 +1,70 @@
+const lengthInput = document.getElementById("length");
+const lengthVal = document.getElementById("length-val");
+const resultDisplay = document.getElementById("result");
+const strengthFill = document.getElementById("strength-fill");
+const strengthText = document.getElementById("strength-text");
+const copyBtn = document.getElementById("copy-btn");
 
-let lowercase = document.getElementById("lowercase");
-let uppercase = document.getElementById("uppercase");
-let number = document.getElementById("number");
-let symbol = document.getElementById("symbol");
-let generate = document.getElementById("generate");
-let result = document.getElementById("result");
-let regen = document.getElementById("regen");
+lengthInput.oninput = () => lengthVal.textContent = lengthInput.value;
 
-function genpassword() {
-    let length = document.getElementById("length").value;
-    length = Number(length);
-    if (length <= 0) {
-        result.textContent = "Enter a valid range";
+copyBtn.onclick = () => {
+    if (resultDisplay.textContent === "...") return;
+    navigator.clipboard.writeText(resultDisplay.textContent);
+    const originalIcon = copyBtn.innerHTML;
+    copyBtn.innerHTML = '<b style="font-size:10px; color:#3b82f6">COPIED</b>';
+    setTimeout(() => copyBtn.innerHTML = originalIcon, 1500);
+};
+
+function genPassword() {
+    const length = Number(lengthInput.value);
+    const charSets = {
+        uppercase: "ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+        lowercase: "abcdefghijklmnopqrstuvwxyz",
+        number: "0123456789",
+        symbol: "!@#$%^&*()_+~`|}{[]:;?><,./-="
+    };
+
+    let allowed = "";
+    let score = 0;
+
+    for (let key in charSets) {
+        if (document.getElementById(key).checked) {
+            allowed += charSets[key];
+            score++;
+        }
+    }
+
+    if (!allowed) {
+        resultDisplay.textContent = "Select options";
+        updateMeter(0, 0);
         return;
     }
-    let lc = "abcdefghijklmnopqrstuvwxyz";
-    let uc = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    let num = "1234567890";
-    let symbols = "!@#$%^&*()_+-={}[]|:;<>,.?/";
 
     let password = "";
-    let allowed = "";
-
-    if (lowercase.checked) {
-        allowed += lc;
-    }
-    if (uppercase.checked) {
-        allowed += uc;
-    }
-    if (number.checked) {
-        allowed += num;
-    }
-    if (symbol.checked) {
-        allowed += symbols;
-    }
-    if (allowed.length == 0) {
-        result.textContent = "select atleast any one option";
-        return;
-    }
     for (let i = 0; i < length; i++) {
-        let randindex = Math.floor((Math.random() * allowed.length));
-        password += allowed[randindex];
-    }
-    let strength = 0;
-
-    if (length >= 8) {
-        strength++;
+        password += allowed[Math.floor(Math.random() * allowed.length)];
     }
 
-    if (uppercase.checked) {
-        strength++;
-    }
-
-    if (number.checked) {
-        strength++;
-    }
-
-    if (symbol.checked) {
-        strength++;
-    }
-    let strengthText = "";
-
-    if (strength <= 1) {
-        strengthText = "Weak";
-    }
-    else if (strength <= 3) {
-        strengthText = "Medium";
-    }
-    else {
-        strengthText = "Strong";
-    }
-    result.textContent =
-        `Your randomly generated password is ${password}
-Strength: ${strengthText}`;
+    resultDisplay.textContent = password;
+    updateMeter(score, length);
 }
-generate.onclick = genpassword;
-regen.onclick = genpassword;
+
+function updateMeter(score, len) {
+    let strengthIndex = 0; 
+    
+    if (len >= 10 && score >= 2) strengthIndex = 1;
+    if (len >= 14 && score >= 3) strengthIndex = 2;
+    if (len < 6) strengthIndex = 0;
+
+    const colors = ["#ef4444", "#f59e0b", "#22c55e"];
+    const labels = ["WEAK", "MEDIUM", "STRONG"];
+    const widths = ["33%", "66%", "100%"];
+
+    strengthFill.style.width = widths[strengthIndex];
+    strengthFill.style.backgroundColor = colors[strengthIndex];
+    strengthText.textContent = labels[strengthIndex];
+    strengthText.style.color = colors[strengthIndex];
+}
+
+document.getElementById("generate").onclick = genPassword;
+window.onload = genPassword;
